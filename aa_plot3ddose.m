@@ -1,9 +1,9 @@
 % cubo = zeros([512,512,39]);
 % cubo(ans) = L;
 % cubo(idx_shift) = 6;
-% cubo = zeros([160 160 160]);
-% cubo(initIx) = 1;
-% cubo(idx) = 10;
+cubo = zeros([160 160 160]);
+cubo(initIx) = 1;
+cubo(idx) = 10;
 
 % cubo = ct.cube{1};
 % cubo = rocubo;
@@ -40,7 +40,8 @@ surf([160,160;160,160],[0,160;0,160],[0,0;160,160],'FaceAlpha',0.1,'FaceColor','
 
 view(3)
 
-level = [1e-05,9,100];
+% level = [1e-05,9,100];
+level = [.9,9.39];
 face = [.3,.9,1];
 colo = ['b','g','k'];
 for i = 1:1
