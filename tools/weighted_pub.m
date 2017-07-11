@@ -62,7 +62,7 @@ for s=1:13
 %     Untitled2(sigma_ray, result(s,3), result(s,2), n, [result(s,4) result(s,5)], method, result(s,1))
 end
 s0 = find(result(:,1)==min(result(:,1)));
-Untitled2(sigma_rayvec(s0), result(s0,3), result(s0,2), n, [result(s0,4) result(s0,5)], method, result(s0,1))
+Untitled2(sigma_rayvec(s0), result(s0,3), result(s0,2), n, [result(s0,4) result(s0,5)], method)
 
 %%
 % Here we plot the minimum values for each sigma_ray and we analyize some
@@ -143,7 +143,7 @@ for s=1:13
 %     %
 end
 s0 = find(result(:,1)==min(result(:,1)));
-Untitled2(sigma_rayvec(s0), result(s0,3), result(s0,2), n, [result(s0,4) result(s0,5)], method, result(s0,1))
+Untitled2(sigma_rayvec(s0), result(s0,3), result(s0,2), n, [result(s0,4) result(s0,5)], method)
 
 %%
 figure
@@ -221,7 +221,7 @@ for s=1:12
 %     Untitled2(sigma_ray, result(s,3), result(s,2), n, [result(s,4) result(s,5)], method, result(s,1))
 end
 s0 = find(result(:,1)==min(result(:,1)));
-Untitled2(sigma_rayvec(s0), result(s0,3), result(s0,2), n, [result(s0,4) result(s0,5)], method, result(s0,1))
+Untitled2(sigma_rayvec(s0), result(s0,3), result(s0,2), n, [result(s0,4) result(s0,5)], method)
 
 %%
 % Here we plot the minimum values for each sigma_ray and we analyize some
@@ -302,7 +302,7 @@ for s=1:10
 %     %
 end
 s0 = find(result(:,1)==min(result(:,1)));
-Untitled2(sigma_rayvec(s0), result(s0,3), result(s0,2), n, [result(s0,4) result(s0,5)], method, result(s0,1))
+Untitled2(sigma_rayvec(s0), result(s0,3), result(s0,2), n, [result(s0,4) result(s0,5)], method)
 
 %%
 figure

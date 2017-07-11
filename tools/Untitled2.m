@@ -1,4 +1,4 @@
-function Untitled2(sigma_ray,sigma_sub,radius,n,X1,method)
+function maxibon = Untitled2(sigma_ray,sigma_sub,radius,n,X1,method)
 
 clear subGauss
 
