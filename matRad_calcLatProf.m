@@ -14,11 +14,13 @@ L_Narr =  exp( -rad_distancesSq ./ (2*sigmaSq_Narr))./(2*pi*sigmaSq_Narr);
 L_Bro  =  exp( -rad_distancesSq ./ (2*sigmaSq_Bro ))./(2*pi*sigmaSq_Bro );
 L = baseData.LatCutOff.CompFac * ((1-(X(:,2))).*L_Narr) + (X(:,2).*L_Bro);
 
+
 % Need to be done better, this is only a test
-bins = [0,20,48,56];
-peakvec = find(baseData.Z >= baseData.Z(bins(4)+1));
-bins(5) = peakvec(end);
-tailvec = find(baseData.Z < baseData.Z(bins(1)+1));
+bins = [1,20,48,56];
+% peakvec = find(baseData.Z >= baseData.Z(bins(4)+1));
+% bins(5) = peakvec(end);
+bins(5) = find(baseData.Z == max(baseData.Z));
+tailvec = find(baseData.Z < baseData.Z(bins(1)));
 
 % esce una merda dal calcolo degli indici. rivedere
 profileLat = zeros(dim);
@@ -37,19 +39,21 @@ k = find(cut2); cut2(k(1):k(end)) = 1;
 % cut cubes
 profileLat( ~cut1, :, :) = []; % rows
 profileLat( :, ~cut2, :) = []; % columns
-profileLat( :, :, ~cut3) = []; % slices  
+profileLat( :, :, ~cut3) = []; % slices
+
 
 xdist = size(profileLat,1);
 xdistZ = size(baseData.Z,1);
 
+baseData.Z(1) = 0;
 for i = 1:4
-latProf.section(i) = [baseData.Z(bins(i)+1) baseData.Z(bins(i+1))];
-latProf.Mask(i) = profileLat(floor(xdist*bins(i)/xdistZ)+1 : floor(xdist*bins(i+1)/xdistZ)+1, :,:);
-latProf.Mask(i) = sum(latProf.Mask(1),1)./size(latProf.Mask(1),1);
+latProf.section(i,:) = [baseData.Z(bins(i)) baseData.Z(bins(i+1))];
+tempMask = profileLat(floor(xdist*bins(i)/xdistZ)+1 : floor(xdist*bins(i+1)/xdistZ)+1, :,:);
+latProf.Mask(:,:,i) = sum(tempMask,1)./size(tempMask,1);
 end
-latProf.Mask(5) = profileLat(end,:,:);
-latProf.section(5) = [0 tailvec(1)];
+latProf.Mask(:,:,5) = profileLat(end,:,:);
+latProf.section(5,:) = [0 baseData.Z(tailvec(1))];
 
-disp(':)')
+% disp(':)')
 
 

@@ -72,11 +72,14 @@ for i = 1:pln.numOfBeams
 end
 
 % compute phyical dose
-resultGUI.physicalDose = reshape(full(dij.physicalDose{1}(:,1)),ct.cubeDim);
+resultGUI.physicalDose = dij.physicalDose{1};
 rotcube = imrotate(resultGUI.physicalDose,-stf.gantryAngle,'bicubic','crop');
-rotcube = permute(rotcube,[1 3 2]);
-rotcube = imrotate(rotcube,stf.couchAngle,'bicubic','crop');
-resultGUI.physicalDose = permute(rotcube,[1 3 2]);
+% rotcube = permute(rotcube,[1 3 2]);
+% rotcube = imrotate(rotcube,stf.couchAngle,'bicubic','crop');
+tempCube = permute(rotcube,[1 2 3]);
+
+resultGUI.physicalDose = zeros(ct.cubeDim);
+resultGUI.physicalDose(cst{1,4}{1,1}) = tempCube(cst{1,4}{1,1});
 
 
 % compute LET if applicable

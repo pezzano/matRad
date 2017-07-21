@@ -13,7 +13,7 @@ xx = repmat(x,[size(rayEn{2},1) 1]);
 
 pos2(:,2,:) = xx;
 
-idx = sub2ind(dim, reshape(pos2(:,2,:),1,[]), reshape(pos2(:,1,:),1,[]), reshape(pos2(:,3,:),1,[]));
+idx = sub2ind(dim, round(reshape(pos2(:,2,:),1,[])), round(reshape(pos2(:,1,:),1,[])), round(reshape(pos2(:,3,:),1,[])));
 
 TracMat = zeros(size(radDepthMat));
 TracMat(idx) = radDepthMat(idx);
