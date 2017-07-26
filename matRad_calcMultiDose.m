@@ -1,4 +1,4 @@
-function [doseMat] = matRad_calcMultiDose(TracMat,baseData,latProf,V,tot)
+function [doseMat] = matRad_calcMultiDose(TracMat,baseData,latProf,V,tot,weights,pos)
 
 conversionFactor = 1.6021766208e-02;
 
@@ -21,8 +21,8 @@ else
         repmat(conversionFactor.*baseData.Z,[1 dimTM(2)]),TracMatc,x);
 end
 
-TracMatf = zeros(size(TracMat));
-TracMatf(cutt2,cutt) = interpData;
+TracMatRes = zeros(size(TracMat));
+TracMatRes(cutt2,cutt) = interpData;
 % resul = zeros(size(TracMatf));
 % tic
 % for i =1:5
@@ -32,7 +32,14 @@ TracMatf(cutt2,cutt) = interpData;
 % end
 % toc
 
-TracMatf(~ismember(TracMatf,TracMatf(V))) = 0;
+% TracMatf(~ismember(TracMatf,TracMatf(V))) = 0;
+TracMatf = zeros(size(TracMat));
+TracMatf(V) = TracMatRes(V);
+
+
+for i = 1:length(weights)
+    TracMatf(:,pos(i,1),pos(i,3)) = TracMatf(:,pos(i,1),pos(i,3)).* weights(i);
+end
 
 mat4conv = TracMatf;
 cut1 = any(any(TracMatf,1),2);
@@ -54,7 +61,7 @@ for i =1:tot
     convMat = mat4conv;
     convMat(mat4conv > repmat(maxInSampl*i/tot,size(mat4conv,1),1,1) |...
         mat4conv <= repmat(maxInSampl*(i-1)/tot,size(mat4conv,1),1,1)) = 0;
-    if sum(convMat) ~= 0
+    if sum(sum(sum(convMat))) ~= 0
         resul = convn(convMat,permute(latProf.Mask(:,:,i),[3,2,1]));
         
         cut1(k1(1)-floor(size(latProf.Mask(:,:,i),1)/2) : k1(end)+floor(size(latProf.Mask(:,:,i),1)/2)) = 1;

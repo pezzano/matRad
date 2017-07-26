@@ -268,7 +268,7 @@ for i = 1:dij.numOfBeams % loop over all beams
     % obtain radiation depths matrix
     %tic
     totalBeamDose = zeros(ct.cubeDim);
-    totalNumberOfLateralFractions = 150;
+    totalNumberOfLateralFractions = 80;
     
     for j = 1:size(stf(i).rayPerEnergy,1)
         
@@ -277,16 +277,15 @@ for i = 1:dij.numOfBeams % loop over all beams
         % Here i use mean for SSD, will find a better way in the future
         sigmaIni = matRad_interp1(machine.data(energyIdx).initFocus.dist(1,:)',machine.data(energyIdx).initFocus.sigma(1,:)',sum([stf.ray.SSD])./length([stf.ray.SSD]));
         
-        [finalWeight, X1, sigma_sub, radius, posx, posz, numOfSub] = ...
+        [Weights, X1, sigma_sub, radius, posx, posz, numOfSub] = ...
                     matRad_calcWeights(sigmaIni, 2, 'circle');
         
-        
-        
-        [TracMat] = matRad_multipleRayTracing(radDepthsMat,stf(i).rayPerEnergy(j,:),...
-            pln.isoCenter,[ct.resolution.x ct.resolution.y ct.resolution.z]);
+        [TracMat, SamplPos, finalWeights] = matRad_multipleRayTracing(radDepthsMat,stf(i).rayPerEnergy(j,:),...
+            pln.isoCenter,[ct.resolution.x ct.resolution.y ct.resolution.z],...
+            posx,posz,Weights);
         
         [latProf] = matRad_calcLatProf2(machine.data(centralEnergyIdx),...
-            radialDist_sq, sigmaIni, [ct.resolution.x ct.resolution.y ct.resolution.z],...
+            radialDist_sq, sigma_sub, [ct.resolution.x ct.resolution.y ct.resolution.z],...
             totalNumberOfLateralFractions);
         
         if j==18
@@ -294,7 +293,8 @@ for i = 1:dij.numOfBeams % loop over all beams
         end
         
         tempBeamDose = totalBeamDose + matRad_calcMultiDose(TracMat,...
-            machine.data(energyIdx),latProf,V,totalNumberOfLateralFractions);
+            machine.data(energyIdx),latProf,V,totalNumberOfLateralFractions,...
+            finalWeights,SamplPos);
         
         % Display progress and update text 
         matRad_progress(j,size(stf(i).rayPerEnergy,1));
