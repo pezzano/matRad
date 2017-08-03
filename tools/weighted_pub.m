@@ -31,29 +31,31 @@
 %% Circular weights
 % We have here an analysis of the weighted sum using a circular shape.
 % 
-load('pezzWeightsData_circle') % gotta save to it and change name
+load('pezzWeightsData_circle8_2.mat') % gotta save to it and change name
+n = 8;
 method = 'circle';
 clear tripletta
 clear result
 
-for s=1:13
+for s=1:8
     i=0;
     sigma_ray = sigma_rayvec(s);
-    radiusvec = linspace(sigma_ray/2, 0.95*sigma_ray/1.1, 22);
-    for k=1:22
+    radiusvec = linspace(sigma_ray/5, sigma_ray/4, 3);
+    tripletta{s} = [];
+    for k=1:3
         radius = radiusvec(k);
-        sigma_subvec = linspace(1.1*sigma_ray/2,0.95*sigma_ray,20);
-        for m=1:20
+        sigma_subvec = linspace(sigma_ray/3.5,sigma_ray/2,10);
+        for m=1:10
             sigma_sub = sigma_subvec(m);
             
             X1 = X_rad(k,m,s,:);
             
-            if X1(2) >= radius && maxi_rad(k,m,s) <= 1 % this comes from 
+            % if X1(2) >= radius && maxi_rad(k,m,s) <= 1 % this comes from 
                 % the sampling theorem
                 i=i+1;
                 %Untitled2(sigma_ray,sigma_sub,radius,n,X1,method,maxi_rad(k,m))
                 tripletta{s}(i,:) = ([maxi_rad(k,m,s), radius, sigma_sub, X1(1), X1(2), timei_rad(k,m,s)]);
-            end
+            % end
         end
     end
     result(s,:) = tripletta{s}(tripletta{s}(:,1)==min(tripletta{s}(:,1)),:);
@@ -76,14 +78,15 @@ title('\sigma_{ray} Vs. Maximum (%) error')
 figure
 scatter(sigma_rayvec, result(:,2))
 hold
-coeff_rad_circ = polyfit(sigma_rayvec(1:10)',result(1:10,2),1);
+coeff_rad_circ = polyfit(sigma_rayvec(1:8)',result(1:8,2),1);
 plot(x, coeff_rad_circ(1).*x+coeff_rad_circ(2),'r')
 title('\sigma_{ray} Vs. radius (mm)')
 
 figure
 scatter(sigma_rayvec, result(:,3))
 hold
-coeff_sig_circ = polyfit(sigma_rayvec(1:10)',result(1:10,3),1);
+
+coeff_sig_circ = polyfit(sigma_rayvec(1:8)',result(1:8,3),1);
 plot(x, coeff_sig_circ(1).*x+coeff_sig_circ(2),'r')
 title('\sigma_{ray} Vs. \sigma_{sub}')
 
@@ -94,21 +97,21 @@ title('\sigma_{ray} Vs. computation time')
 figure
 scatter(sigma_rayvec, result(:,4))
 hold
-coeff= polyfit(sigma_rayvec(1:10)',result(1:10,4),2);
+coeff= polyfit(sigma_rayvec(1:8)',result(1:8,4),2);
 plot(x, coeff(1).*x.^2+coeff(2).*x+coeff(3),'r')
 title('\sigma_{ray} Vs. normalization of weights')
 
 figure
 scatter(sigma_rayvec, result(:,5))
 hold
-coeff= polyfit(sigma_rayvec(1:10)',result(1:10,5),1);
+coeff= polyfit(sigma_rayvec(1:8)',result(1:8,5),1);
 plot(x, coeff(1).*x+coeff(2),'r')
 title('\sigma_{ray} Vs. \sigma_w')
 
-coeff_rad_circ_correct = polyfit(sigma_rayvec(1:10)',result(1:10,2),1);
-coeff_sig_circ_correct = polyfit(sigma_rayvec(1:10)',result(1:10,3),1);
-coeff_sigW_circ_correct= polyfit(sigma_rayvec(1:10)',result(1:10,5),1);
-coeff_w_circ_correct= polyfit(sigma_rayvec(1:10)',result(1:10,4),2);
+coeff_rad_circ_correct = polyfit(sigma_rayvec(1:8)',result(1:8,2),1);
+coeff_sig_circ_correct = polyfit(sigma_rayvec(1:8)',result(1:8,3),1);
+coeff_sigW_circ_correct= polyfit(sigma_rayvec(1:8)',result(1:8,5),1);
+coeff_w_circ_correct= polyfit(sigma_rayvec(1:8)',result(1:8,4),2);
 
 %% Square shape
 load('pezzWeightsData_square') % gotta save to it and change name

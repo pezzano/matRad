@@ -35,6 +35,7 @@ TracMatRes(cutt2,cutt) = interpData;
 % TracMatf(~ismember(TracMatf,TracMatf(V))) = 0;
 TracMatf = zeros(size(TracMat));
 TracMatf(V) = TracMatRes(V);
+TracMatf(isnan(TracMatf)) = 0;
 
 
 for i = 1:length(weights)

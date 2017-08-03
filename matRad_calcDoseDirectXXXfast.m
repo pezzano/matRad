@@ -73,10 +73,10 @@ end
 
 % compute phyical dose
 resultGUI.physicalDose = dij.physicalDose{1};
-rotcube = imrotate(resultGUI.physicalDose,-stf.gantryAngle,'bicubic','crop');
+tempCube = imrotate(resultGUI.physicalDose,-stf.gantryAngle,'bicubic','crop');
 % rotcube = permute(rotcube,[1 3 2]);
 % rotcube = imrotate(rotcube,stf.couchAngle,'bicubic','crop');
-tempCube = permute(rotcube,[1 2 3]);
+% tempCube = permute(rotcube,[1 2 3]);
 
 resultGUI.physicalDose = zeros(ct.cubeDim);
 resultGUI.physicalDose(cst{1,4}{1,1}) = tempCube(cst{1,4}{1,1});

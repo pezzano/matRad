@@ -1,6 +1,6 @@
 % dosedose = full(doseTmpContainer{1});
 % dosedose = reshape(dosedose,dij.dimensions);
-dosedose = TracMatf;
+dosedose = TracMat;
 hold off
 scatter3(80, 80, 80, 'xr')
 hold on
@@ -18,6 +18,11 @@ hold on
 % surf([stf.isoCenter(2)-512,stf.isoCenter(2)-512;stf.isoCenter(2)-512,stf.isoCenter(2)-512],[stf.isoCenter(1)-512,stf.isoCenter(1);stf.isoCenter(1)-512,stf.isoCenter(1)],[stf.isoCenter(3)-390,stf.isoCenter(3)-390;stf.isoCenter(3),stf.isoCenter(3)],'FaceAlpha',0.1,'FaceColor','c')
 % surf([stf.isoCenter(2)-512,stf.isoCenter(2);stf.isoCenter(2)-512,stf.isoCenter(2)],[stf.isoCenter(1),stf.isoCenter(1);stf.isoCenter(1),stf.isoCenter(1)],[stf.isoCenter(3)-390,stf.isoCenter(3)-390;stf.isoCenter(3),stf.isoCenter(3)],'FaceAlpha',0.1,'FaceColor','c')
 % surf([stf.isoCenter(2),stf.isoCenter(2);stf.isoCenter(2),stf.isoCenter(2)],[stf.isoCenter(1)-512,stf.isoCenter(1);stf.isoCenter(1)-512,stf.isoCenter(1)],[stf.isoCenter(3)-390,stf.isoCenter(3)-390;stf.isoCenter(3),stf.isoCenter(3)],'FaceAlpha',0.1,'FaceColor','c')
+
+surf([0,160;0,160],[0,0;0,0],[0,0;160,160],'FaceAlpha',0.1,'FaceColor','c')
+surf([0,0;0,0],[0,160;0,160],[0,0;160,160],'FaceAlpha',0.1,'FaceColor','c')
+surf([0,160;0,160],[160,160;160,160],[0,0;160,160],'FaceAlpha',0.1,'FaceColor','c')
+surf([160,160;160,160],[0,160;0,160],[0,0;160,160],'FaceAlpha',0.1,'FaceColor','c')
 
 view(3)
 %cubo = interp3(

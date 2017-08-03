@@ -272,6 +272,8 @@ for i = 1:dij.numOfBeams % loop over all beams
                 [finalWeight, X1, sigma_sub, radius, posx, posz, numOfSub] = ...
                     matRad_calcWeights(SigmaIni, 2, 'circle');
                 
+                load('E:\Pezzano\MATLAB\matRad\tools\weightsInfo2.mat')
+                posz = posy;
                 % run over components
                 for c = 1:numOfSub
                     

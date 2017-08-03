@@ -1,14 +1,14 @@
 % cubo = zeros([512,512,39]);
 % cubo(ans) = L;
 % cubo(idx_shift) = 6;
-cubo = zeros([160 160 160]);
-cubo(initIx) = 1;
-cubo(idx) = 10;
+% cubo = zeros([160 160 160]);
+% cubo(initIx) = 1;
+% cubo(idx) = 10;
 
 % cubo = ct.cube{1};
 % cubo = rocubo;
 
-% cubo = TracMatf;
+cubo = TracMat;
 
 
 

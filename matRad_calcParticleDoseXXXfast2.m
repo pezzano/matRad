@@ -46,8 +46,8 @@ figureWait = waitbar(0,'calculate dose influence matrix for particles...');
 set(figureWait,'pointer','watch');
 
 % rotate the ct cube agreeing with beam direction
-rotcube = imrotate(ct.cube{1},-stf.gantryAngle,'bicubic','crop');
-ct.cube{1} = permute(rotcube,[2 1 3]);
+ct.cube{1} = imrotate(ct.cube{1},stf.gantryAngle,'bicubic','crop');
+% ct.cube{1} = permute(rotcube,[2 1 3]);
 % rotcube = imrotate(rotcube,-stf.couchAngle,'bicubic','crop');
 % ct.cube{1} = permute(rotcube,[1 3 2]);
 

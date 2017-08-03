@@ -1,4 +1,4 @@
-function X1=mR_findWeights(sigma_ray, sigma_sub, n, radius, method)
+function [X1,finalWeight, posx,posy,numOfSub]=mR_findWeights(sigma_ray, sigma_sub, n, radius, method)
 
 % This function calculates weights for a fine sampling pencil beam
 % algorithm
@@ -16,26 +16,26 @@ function X1=mR_findWeights(sigma_ray, sigma_sub, n, radius, method)
 
 
 
-n=2;
-% radius=4;
+% n=8;
+% radius=0.9;
 % sigma_ray=7;
-% sigma_sub=5.5;
-method = 'square';
+% sigma_sub=1.7;
+method = 'circle';
 % method = 'circle';
 % startingPoint(1) = sqrt(sigma_ray^2-sigma_sub^2);
 % startingPoint(2) = sigma_sub^2*startingPoint(1)^2/sigma_ray^2;
 startingPoint(1) = 16;
 startingPoint(2) = 1;
-sigma_rayvec = linspace(3,15,13);
+% sigma_rayvec = linspace(3,15,13);
 %sigma_rayvec = 6;
-for s=1:13
-    sigma_ray = sigma_rayvec(s);
-    radiusvec = linspace(sigma_ray/2, 0.95*sigma_ray/1.1, 15);
-    for k=1:15
-        radius = radiusvec(k);
-        sigma_subvec = linspace(1.1*sigma_ray/2,0.95*sigma_ray,12);
-        for m=1:12
-            sigma_sub = sigma_subvec(m);
+% for s=1:13
+%     sigma_ray = sigma_rayvec(s);
+%     radiusvec = linspace(sigma_ray/2, 0.95*sigma_ray/1.1, 15);
+%     for k=1:15
+%         radius = radiusvec(k);
+%         sigma_subvec = linspace(1.1*sigma_ray/2,0.95*sigma_ray,12);
+%         for m=1:12
+%             sigma_sub = sigma_subvec(m);
 %for test = 1:10;
             tic;
             
@@ -93,14 +93,14 @@ for s=1:13
             end
             
             [X1,fx] = fminsearch(f3, startingPoint);
-            X_rad(k,m,s,:) = X1;
-            todisp = [sigma_ray radius sigma_sub X1];
+            % X_rad(k,m,s,:) = X1;
+            todisp = [sigma_ray radius sigma_sub X1 toc];
             disp(todisp)
             %[X1,fx] = fminsearch(f3, [2,1],optimset('MaxIter',1000))
             
             %timex = toc;
             %tempoi(test) = toc;
-            timei_rad(k,m,s) = toc;
+            % timei_rad(k,m,s) = toc;
 %             
             %         subGauss = zeros([length(x0) length(x0) numOfSub]);
             f1test = gaussian2(x0,y0,0,0,sigma_ray);
@@ -113,11 +113,11 @@ for s=1:13
             end
            
             %maxi_test(test) = max(max(abs((f2test(X1)-f1test)./max(max(f1test)).*100)));
-            maxi_rad(k,m,s) = max(max(abs((f2test(X1)-f1test)./max(max(f1test)).*100)));
-            pointi_rad(k,m,s) = radius;
-        end
-    end
-end
+            %maxi_rad(k,m,s) = max(max(abs((f2test(X1)-f1test)./max(max(f1test)).*100)));
+            %pointi_rad(k,m,s) = radius;
+%         end
+%     end
+% end
 
 figure
 subplot(2,2,1)
@@ -140,7 +140,11 @@ title('rel diff')
 %title(strcat('max percentage error =  ',num2str(max(max((f2test(X1)-f1test)./f1test.*100))),...
 %   '%      elapsed time =  ',num2str(timex),'s    for  ',num2str(numOfPoints),'  points'))
 
-
+finalWeight = zeros([1 numOfSub]);
+gaussian2 = @(x, y, mux, muy ,sig) (2*pi*sig^2)^(-1) .* exp(-(x-mux).^2/(2*(sig^2)))' * exp(-(y-muy).^2/(2*(sig^2)));
+for i=1:numOfSub
+    finalWeight(i) = X1(1) * gaussian2(posx(i),posy(i),0,0,X1(2));
+end
 
 
 % save('pezzWeightsData_square')

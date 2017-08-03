@@ -72,7 +72,13 @@ else if n==3
     end
 end
 
-for i=1:numOfSub
+colorvec = ['b','g','c','g','c','g','c','y','y','y','y','y','y','y','y','y','y','y','y'];
+falpha = [.2, .4, .4, .4, .4, .4, .4, .8, .8, .8, .8, .8, .8, .8, .8, .8, .8, .8, .8];
+
+colorvec = cat(2,colorvec,colorvec,colorvec,colorvec,colorvec);
+falpha = cat(2,falpha,falpha,falpha,falpha,falpha);
+
+for i=1:round(numOfSub/200)
     surf(subGauss(:,:,i),'LineWidth',1,'EdgeAlpha',.00001,'FaceAlpha',falpha(i),'FaceColor',colorvec(i))
 end
 title(strcat('r = ', num2str(radius), '       \sigma_s = ', num2str(sigma_sub), ...

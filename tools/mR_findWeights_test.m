@@ -1,4 +1,4 @@
-n=3;
+n=8;
 % radius=4;
 % sigma_ray=7;
 % sigma_sub=5.5;
@@ -8,21 +8,21 @@ methodi = ['circle';'square'];
 % startingPoint(2) = sigma_sub^2*startingPoint(1)^2/sigma_ray^2;
 startingPoint(1) = 16;
 startingPoint(2) = 1;
-sigma_rayvec = linspace(8,20,13);
+sigma_rayvec = linspace(3,10,8);
 %sigma_rayvec = 6;
-for met = 1:2
+for met = 1:1
     if met==1
         method='circle';
     else
         method='square';
     end
-    for s=1:13
+    for s=1:8
         sigma_ray = sigma_rayvec(s);
-        radiusvec = linspace(sigma_ray/2, 0.95*sigma_ray/1.1, 22);
-        for k=1:22
+        radiusvec = linspace(sigma_ray/5, sigma_ray/4, 3);
+        for k=1:3
             radius = radiusvec(k);
-            sigma_subvec = linspace(1.1*sigma_ray/2,0.95*sigma_ray,20);
-            for m=1:20
+            sigma_subvec = linspace(sigma_ray/3.5,sigma_ray/2,10);
+            for m=1:10
                 sigma_sub = sigma_subvec(m);
                 %for test = 1:10;
                 tic;
@@ -130,10 +130,10 @@ for met = 1:2
     
     
     
-%     if method == 'square'
-%         save('pezzWeightsData_square3')
-%     else
-%         save('pezzWeightsData_circle3')
-%     end
+    if method == 'square'
+        save('pezzWeightsData_square3')
+    else
+        save('pezzWeightsData_circle8')
+    end
     
 end
