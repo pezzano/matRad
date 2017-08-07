@@ -1,4 +1,4 @@
-function [radDepthV,geoDistV] = matRad_rayTracing(stf,ct,V,rot_coordsV,lateralCutoff)
+function [radDepthsMat,radDepthV,geoDistV] = matRad_rayTracing(stf,ct,V,rot_coordsV,lateralCutoff)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % matRad visualization of two-dimensional dose distributions on ct including
 % segmentation
@@ -50,7 +50,7 @@ end
 
 % set up list with bev coordinates for calculation of radiological depth
 coords = zeros(prod(ct.cubeDim),3);
-coords(V,:) = rot_coordsV;
+coords(V,:) = rot_coordsV; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % calculate spacing of rays on ray matrix
 rayMxSpacing = 1/sqrt(2) * min([ct.resolution.x ct.resolution.y ct.resolution.z]);
@@ -98,7 +98,7 @@ for i = 1:size(rayMx_world,1)
     % run siddon ray tracing algorithm
     [~,l,rho,~,ixHitVoxel] = matRad_siddonRayTracer(stf.isoCenter, ...
                                 ct.resolution, ...
-                                stf.sourcePoint_bev, ...
+                                stf.sourcePoint, ...
                                 rayMx_world(i,:), ...
                                 ct.cube);
 
@@ -106,14 +106,15 @@ for i = 1:size(rayMx_world,1)
     % the closest ray by projecting the voxel coordinates to the
     % intersection points with the ray matrix and checking if the distance 
     % in x and z direction is smaller than the resolution of the ray matrix
-    scale_factor = (rayMx_bev_y - stf.sourcePoint_bev(2)) ./ ...
+    scale_factor = (rayMx_bev_y - stf.sourcePoint_bev(2)) ./ ... %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                    coords(ixHitVoxel,2);
 
     x_dist = coords(ixHitVoxel,1).*scale_factor - rayMx_bev(i,1);
     z_dist = coords(ixHitVoxel,3).*scale_factor - rayMx_bev(i,3);
 
-    ixRememberFromCurrTracing = x_dist > -raySelection & x_dist <= raySelection ...
-                              & z_dist > -raySelection & z_dist <= raySelection;
+    ixRememberFromCurrTracing = (x_dist > -raySelection & x_dist <= raySelection ...
+                               & z_dist > -raySelection & z_dist <= raySelection) ...
+                               | isinf(scale_factor);
 
     if any(ixRememberFromCurrTracing) > 0
 
@@ -129,6 +130,7 @@ for i = 1:size(rayMx_world,1)
 
             % write radiological depth for voxel which we want to remember
             radDepthCube{j}(ixHitVoxel(ixRememberFromCurrTracing)) = dCum(ixRememberFromCurrTracing);
+
         end
     end  
     
@@ -138,4 +140,7 @@ end
 for i = 1:ct.numOfCtScen
     radDepthV{i} = radDepthCube{i}(V);
 end
+
+radDepthsMat = radDepthCube{1};
+
 
