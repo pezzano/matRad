@@ -1,6 +1,8 @@
 % dosedose = full(doseTmpContainer{1});
 % dosedose = reshape(dosedose,dij.dimensions);
-dosedose = TracMat;
+dosedose = zeros([160 160 160]);
+dosedose(posIdx) = radDepthPoints;
+% dosedose = doseMat;
 hold off
 scatter3(80, 80, 80, 'xr')
 hold on

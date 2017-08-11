@@ -165,6 +165,7 @@ end
 % compute SSDs
 stf = matRad_computeSSD(stf,ct);
 
+
 fprintf('matRad: Particle dose calculation...\n');
 counter = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -212,6 +213,7 @@ for i = 1:dij.numOfBeams % loop over all beams
     cutOffLevel = 1;
 
     visBoolLateralCutOff = 0;
+    
     machine = matRad_calcLateralParticleCutOff(machine,cutOffLevel,stf(i),visBoolLateralCutOff);
     fprintf('done.\n');    
 

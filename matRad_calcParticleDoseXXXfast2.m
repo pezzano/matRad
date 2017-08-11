@@ -213,7 +213,7 @@ for i = 1:dij.numOfBeams % loop over all beams
     % Calcualte radiological depth cube
     lateralCutoffRayTracing = 50;
     fprintf('matRad: calculate radiological depth cube...');
-    radDepthV = matRad_rayTracing(stf(i),ct,V,rot_coordsV,lateralCutoffRayTracing);
+    [radDepthCube, radDepthV] = matRad_rayTracing(stf(i),ct,V,rot_coordsV,lateralCutoffRayTracing);
     radDepthsMat = zeros(ct.cubeDim);
     radDepthsMat(V) = radDepthV{1};
     
@@ -277,7 +277,7 @@ for i = 1:dij.numOfBeams % loop over all beams
         % Here i use mean for SSD, will find a better way in the future
         sigmaIni = matRad_interp1(machine.data(energyIdx).initFocus.dist(1,:)',machine.data(energyIdx).initFocus.sigma(1,:)',sum([stf.ray.SSD])./length([stf.ray.SSD]));
         
-        [Weights, X1, sigma_sub, radius, posx, posz, numOfSub] = ...
+        [Weights, sigma_sub, posx, posz, numOfSub, X1, radius] = ...
                     matRad_calcWeights(sigmaIni, 2, 'circle');
         
         [TracMat, SamplPos, finalWeights] = matRad_multipleRayTracing(radDepthsMat,stf(i).rayPerEnergy(j,:),...

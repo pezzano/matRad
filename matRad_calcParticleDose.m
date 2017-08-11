@@ -253,10 +253,13 @@ for i = 1:dij.numOfBeams % loop over all beams
             [finalWeight, sigmaSub, posX, posZ, numOfSub] = ...
                 matRad_calcWeights(sigmaIni, 2, 'circle');
             
-            load('E:\Pezzano\MATLAB\matRad\tools\pezzWeightsData_square14.mat')
-            posX = reshape(posX,[],1);
-            posZ = reshape(posZ,[],1);
-            finalWeight = reshape(finalWeight,[],1);
+%             posX = posX';
+%             posZ = posZ';
+            
+%             load('E:\Pezzano\MATLAB\matRad\tools\pezzWeightsData_square14.mat')
+%             posX = reshape(posX,[],1);
+%             posZ = reshape(posZ,[],1);
+%             finalWeight = reshape(finalWeight,[],1);
             
             for k = 1:stf(i).numOfBixelsPerRay(j) % loop over all bixels per ray
                 

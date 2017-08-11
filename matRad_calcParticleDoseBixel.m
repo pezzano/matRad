@@ -1,4 +1,4 @@
-function dose = matRad_calcParticleDoseBixel(radDepths,radialDist_sq,SSD,focusIx,baseData,sig)
+function dose = matRad_calcParticleDoseBixel(radDepths,radialDist_sq,sigmaIni,baseData)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % matRad visualization of two-dimensional dose distributions on ct including
 % segmentation
@@ -9,8 +9,7 @@ function dose = matRad_calcParticleDoseBixel(radDepths,radialDist_sq,SSD,focusIx
 % input
 %   radDepths:      radiological depths
 %   radialDist_sq:  squared radial distance in BEV from central ray
-%   SSD:            source to surface distance
-%   focusIx:        index of focus to be used
+%   sigmaIni:       initial Gaussian std of pencil beam entering patient
 %   baseData:       base data required for particle dose calculation
 %
 % output
@@ -45,12 +44,20 @@ conversionFactor = 1.6021766208e-02;
 
 if ~isfield(baseData,'sigma')
     
+    % trick to adjust sigmas (is it legal?)
+%     minimum = min(baseData.sigma1);
+%     temp = (baseData.sigma1 - minimum) ./ 1.15;
+%     baseData.sigma1 = temp + minimum;
+%     minimum = min(baseData.sigma2);
+%     temp = (baseData.sigma2 - minimum) ./ 1.15;
+%     baseData.sigma2 = temp + minimum;
+    
     % interpolate depth dose, sigmas, and weights    
     X = matRad_interp1(depths,[conversionFactor*baseData.Z baseData.sigma1 baseData.weight baseData.sigma2],radDepths);
     
     % compute lateral sigmas
-    sigmaSq_Narr = X(:,2).^2 + sig^2;
-    sigmaSq_Bro  = X(:,4).^2 + sig^2;
+    sigmaSq_Narr = X(:,2).^2 + sigmaIni^2;
+    sigmaSq_Bro  = X(:,4).^2 + sigmaIni^2;
     
     % calculate lateral profile
     L_Narr =  exp( -radialDist_sq ./ (2*sigmaSq_Narr))./(2*pi*sigmaSq_Narr);
@@ -58,13 +65,18 @@ if ~isfield(baseData,'sigma')
     L = baseData.LatCutOff.CompFac * ((1-(X(:,3))).*L_Narr) + (X(:,3).*L_Bro);
 
     dose = X(:,1).*L;
+    
+    % This is dangerous but we need this because, using a currIx evaluated
+    % once for every ray, we get a deeper radiation depths that with
+    % interpolation can give negative results.
+    dose(dose<0) = 0;
 else
     
     % interpolate depth dose and sigma
     X = matRad_interp1(depths,[conversionFactor*baseData.Z baseData.sigma],radDepths);
 
     %compute lateral sigma
-    sigmaSq = X(:,2).^2 + sig^2;
+    sigmaSq = X(:,2).^2 + sigmaIni^2;
     
     % calculate dose
     dose = baseData.LatCutOff.CompFac * exp( -radialDist_sq ./ (2*sigmaSq)) .* X(:,1) ./(2*pi*sigmaSq);
